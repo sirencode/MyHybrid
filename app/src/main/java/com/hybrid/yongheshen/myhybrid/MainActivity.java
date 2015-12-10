@@ -6,12 +6,12 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.widget.Button;
 
-
 public class MainActivity extends Activity implements View.OnClickListener
 {
     WebViewEx mWebView;
 
     String mUrl = "file:///data/data/com.hybrid.yongheshen.myhybrid/core/index.html";
+    String mUrl1 = "file:///android_asset/core/index.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

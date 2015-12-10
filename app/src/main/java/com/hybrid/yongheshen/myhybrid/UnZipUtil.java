@@ -30,7 +30,7 @@ public class UnZipUtil
         {
             BufferedOutputStream dest = null; //缓冲输出流
             ZipInputStream zis = new ZipInputStream(new BufferedInputStream(inputStream));
-            ZipEntry entry; //每个zip条目的实例
+            ZipEntry entry = null; //每个zip条目的实例
 
             while ((entry = zis.getNextEntry()) != null)
             {
@@ -63,12 +63,14 @@ public class UnZipUtil
                 } catch (Exception ex)
                 {
                     ex.printStackTrace();
+                    System.out.println(ex.getMessage());
                 }
             }
             zis.close();
         } catch (Exception cwj)
         {
             cwj.printStackTrace();
+            System.out.println(cwj.getMessage());
         }
     }
 }

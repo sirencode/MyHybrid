@@ -35,20 +35,14 @@ public class WelcomeActivity extends Activity
             @Override
             public void run()
             {
+                //解析配置文件config.xml
                 XmlPullParserUtils.getWebZipItem(getApplicationContext());
-
                 InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("assets/core/core.zip");
-                System.out.println("MD5= :"+FileToMD5.md5sum(inputStream));
+                //资源包MD5校验
+                System.out.println("MD5= :"+FileToMD5.md5sum(this.getClass().getClassLoader().getResourceAsStream("assets/core/core.zip")));
                 String desPath = "data/data/com.hybrid.yongheshen.myhybrid/";
+                //将H5资源包解压到指定目录
                 UnZipUtil.Unzip(inputStream, desPath);
-                try
-                {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-
                 Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                 startActivity(intent);
                 WelcomeActivity.this.finish();
