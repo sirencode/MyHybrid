@@ -11,28 +11,44 @@ import java.util.List;
  */
 public class InitFramwork
 {
-    private static Thread mUnZipThread, mJumpThread;
+    private Thread mUnZipThread, mJumpThread;
 
-    private static List<WebZipItem> webZipItems;
+    private List<WebZipItem> webZipItems;
 
-    private static final int NO_ZIPRESOURE = 0x0001;
+    private String PAGNAME = "";
 
-    private static String PAGNAME = "";
+    private Context mContext;
 
-    private static OnInitDoneInterface initDoneInterface;
+    private OnInitDoneInterface initDoneInterface;
 
-    public static void init(Context context)
+    //TODO
+
+    /**
+     * 1 解析配置文件 xml
+     * 2 解压本地h5资源包到指定文件夹
+     * 3 请求APK升级接口
+     * 4 请求H5升级接口
+     */
+
+    public InitFramwork(Context context)
     {
-        unZipRes(context);
+        this.mContext = context;
+        PAGNAME = context.getPackageName();
     }
 
-    public static void setInitDoneInterface(OnInitDoneInterface onInitDoneInterface)
+    public void init()
     {
-        InitFramwork.initDoneInterface = onInitDoneInterface;
+        unZipRes();
         jumpToMain();
     }
 
-    private static void jumpToMain()
+    public void setInitDoneInterface(OnInitDoneInterface onInitDoneInterface)
+    {
+        this.initDoneInterface = onInitDoneInterface;
+
+    }
+
+    private void jumpToMain()
     {
 
         mJumpThread = new Thread(new Runnable()
@@ -53,7 +69,7 @@ public class InitFramwork
                 {
                     e.printStackTrace();
                 }
-                InitFramwork.initDoneInterface.doneInit();
+                initDoneInterface.doneInit();
             }
         });
         mJumpThread.start();
@@ -65,11 +81,11 @@ public class InitFramwork
      * <p/>
      * 获取到配置文件中声明的所有的离线zip资源包
      */
-    private static void unZipRes(final Context context)
+    private void unZipRes()
     {
         webZipItems = new ArrayList<>();
         //解析配置文件config.xml
-        webZipItems = XmlPullParserUtils.getWebZipItem(context);
+        webZipItems = XmlPullParserUtils.getWebZipItem(mContext);
         mUnZipThread = new Thread(new Runnable()
         {
 
@@ -78,11 +94,11 @@ public class InitFramwork
             {
                 for (int i = 0; i < webZipItems.size(); i++)
                 {
-                    InputStream inputStream = context.getClass().getClassLoader().getResourceAsStream("assets/" + webZipItems.get(i).getPath());
+                    InputStream inputStream = mContext.getClass().getClassLoader().getResourceAsStream("assets/" + webZipItems.get(i).getPath());
                     if (inputStream != null)
                     {
                         //资源包MD5校验
-                        System.out.println("MD5= :" + FileToMD5.md5sum(this.getClass().getClassLoader().getResourceAsStream("assets/core" + webZipItems.get(i).getPath())));
+                        System.out.println("MD5= :" + FileToMD5.md5sum(mContext.getClass().getClassLoader().getResourceAsStream("assets/core" + webZipItems.get(i).getPath())));
                         String desPath = "data/data/" + PAGNAME + "/";
                         //将H5资源包解压到指定目录
                         UnZipUtil.Unzip(inputStream, desPath);
