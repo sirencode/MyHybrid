@@ -2,7 +2,6 @@ package com.hybrid.yongheshen.myhybrid;
 
 import android.app.Activity;
 import android.content.Intent;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -15,22 +14,13 @@ import java.util.List;
  */
 public class InitFramwork
 {
-    private Thread mUnZipThread, mJumpThread, mCheckUpdateThread;
+    private Thread mUnZipThread, mCheckUpdateThread;
 
     private List<WebZipItem> webZipItems;
 
     private String PAGNAME = "";
 
     private Activity mContext;
-
-    //TODO
-
-    /**
-     * 1 解析配置文件 xml
-     * 2 解压本地h5资源包到指定文件夹
-     * 3 请求APK升级接口
-     * 4 请求H5升级接口
-     */
 
     public InitFramwork(Activity context)
     {
@@ -92,7 +82,10 @@ public class InitFramwork
                         String result = new String(os.toByteArray());
                         System.out.println("***************" + result
                                 + "******************");
-                        jumpToMain();
+                        Thread.sleep(1000);
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        mContext.startActivity(intent);
+                        mContext.finish();
                     } else
                     {
                         System.out.println("------------------链接失败-----------------");
@@ -100,7 +93,7 @@ public class InitFramwork
                     }
                 } catch (Exception e)
                 {
-                    onError("网络连接失败");
+                    onError("网络连接异常，请检查网络");
                     e.printStackTrace();
                 }
             }
@@ -108,36 +101,6 @@ public class InitFramwork
 
         );
         mCheckUpdateThread.start();
-    }
-
-    private void jumpToMain()
-    {
-
-        mJumpThread = new Thread(new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                try
-                {
-                    mCheckUpdateThread.join();
-                    if (mUnZipThread != null)
-                    {
-                        mUnZipThread = null;
-                    }
-                    Thread.sleep(1000);
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    mContext.startActivity(intent);
-                    mContext.finish();
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mJumpThread.start();
-
     }
 
     /**
@@ -176,6 +139,21 @@ public class InitFramwork
         mUnZipThread.start();
     }
 
+    public boolean isUpdateAPK()
+    {
+        return false;
+    }
+
+    public boolean isUpdateZIPS()
+    {
+        return false;
+    }
+
+    /**
+     * 异常信息处理
+     *
+     * @param info
+     */
     private void onError(final String info)
     {
         mContext.runOnUiThread(new Runnable()
