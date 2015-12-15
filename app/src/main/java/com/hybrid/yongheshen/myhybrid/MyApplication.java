@@ -7,6 +7,8 @@ import android.app.Application;
  */
 public class MyApplication extends Application
 {
+    public static final String URL_404 = "file:///android_asset/404.html";
+    public static final String BASE_URL = "file:///data/data/com.hybrid.yongheshen.myhybrid/core/index.html";
     @Override
     public void onCreate()
     {

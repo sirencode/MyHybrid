@@ -23,7 +23,7 @@ import android.webkit.WebViewClient;
  * @author shenyonghe
  * @since 2015-12-7
  */
-public class WebViewEx extends WebView {
+public class BaseWebView extends WebView {
 
     private static final boolean DEBUG = true;
     private static final String VAR_ARG_PREFIX = "arg";
@@ -44,17 +44,17 @@ public class WebViewEx extends WebView {
     private HashMap<String, Object> mJsInterfaceMap = new HashMap<String, Object>();
     private String mJsStringCache = null;
 
-    public WebViewEx(Context context, AttributeSet attrs, int defStyle) {
+    public BaseWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
-    public WebViewEx(Context context, AttributeSet attrs) {
+    public BaseWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public WebViewEx(Context context) {
+    public BaseWebView(Context context) {
         super(context);
         init(context);
     }
@@ -114,7 +114,7 @@ public class WebViewEx extends WebView {
     }
 
     private void injectJavascriptInterfaces(WebView webView) {
-        if (webView instanceof WebViewEx) {
+        if (webView instanceof BaseWebView) {
             injectJavascriptInterfaces();
         }
     }
@@ -362,7 +362,7 @@ public class WebViewEx extends WebView {
         @Override
         public final boolean onJsPrompt(WebView view, String url, String message,
                                         String defaultValue, JsPromptResult result) {
-            if (view instanceof WebViewEx) {
+            if (view instanceof BaseWebView) {
                 if (handleJsInterface(view, url, message, defaultValue, result)) {
                     return true;
                 }

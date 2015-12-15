@@ -1,7 +1,6 @@
 package com.hybrid.yongheshen.myhybrid;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 /**
@@ -16,18 +15,18 @@ public class WelcomeActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.load);
-        InitFramwork initFramwork = new InitFramwork(getApplicationContext());
-        initFramwork.setInitDoneInterface(new InitFramwork.OnInitDoneInterface()
-        {
-
-            @Override
-            public void doneInit()
-            {
-                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                startActivity(intent);
-                WelcomeActivity.this.finish();
-            }
-        });
+        InitFramwork initFramwork = new InitFramwork(WelcomeActivity.this);
+//        initFramwork.setInitDoneInterface(new InitFramwork.OnInitDoneInterface()
+//        {
+//
+//            @Override
+//            public void doneInit()
+//            {
+//                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+//                startActivity(intent);
+//                WelcomeActivity.this.finish();
+//            }
+//        });
         initFramwork.init();
     }
 

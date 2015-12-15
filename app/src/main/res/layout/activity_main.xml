@@ -6,12 +6,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Call Js"
-        android:id="@+id/button"/>
-    <com.hybrid.yongheshen.myhybrid.WebViewEx
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Call Js"
+            android:id="@+id/btn_callJs"/>s
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HttpGet"
+            android:id="@+id/btn_httpGet"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HttpPost"
+            android:id="@+id/btn_httpPost"/>
+
+    </LinearLayout>
+
+    <com.hybrid.yongheshen.myhybrid.BaseWebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/webView"/>

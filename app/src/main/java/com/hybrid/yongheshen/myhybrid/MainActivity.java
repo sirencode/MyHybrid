@@ -8,10 +8,7 @@ import android.widget.Button;
 
 public class MainActivity extends Activity implements View.OnClickListener
 {
-    WebViewEx mWebView;
-
-    String mUrl = "file:///data/data/com.hybrid.yongheshen.myhybrid/core/index.html";
-    String mUrl1 = "file:///android_asset/core/index.html";
+    BaseWebView mWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -23,22 +20,37 @@ public class MainActivity extends Activity implements View.OnClickListener
 
     private void initViews()
     {
-        Button callJs = (Button) findViewById(R.id.button);
+        Button callJs = (Button) findViewById(R.id.btn_callJs);
         callJs.setOnClickListener(this);
-        mWebView = (WebViewEx) findViewById(R.id.webView);
+        Button httpGet = (Button) findViewById(R.id.btn_httpGet);
+        httpGet.setOnClickListener(this);
+        Button httpPost = (Button) findViewById(R.id.btn_httpPost);
+        httpPost.setOnClickListener(this);
+        mWebView = (BaseWebView) findViewById(R.id.webView);
+        mWebView.setWebViewClient(new MyWebViewClient());
+        mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JSInterface(getApplicationContext()), "jsInterface");
-        mWebView.setWebChromeClient(new WebChromeClient()
-        {
-
-        });
-        mWebView.loadUrl(mUrl);
+        mWebView.addJavascriptInterface(new JSInterface(MainActivity.this), "jsInterface");
+        mWebView.loadUrl(MyApplication.BASE_URL);
     }
 
     @Override
     public void onClick(View v)
     {
-        mWebView.loadUrl("javascript:testAlert()");
+        switch (v.getId())
+        {
+            case R.id.btn_callJs:
+                mWebView.loadUrl("javascript:testAlert()");
+                break;
+
+            case R.id.btn_httpGet:
+
+                break;
+
+            default:
+                break;
+        }
+
     }
 
 }
