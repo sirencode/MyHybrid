@@ -7,11 +7,23 @@ public class WebZipItem
 {
     private String name;
 
-    private float version;
+    private String version;
 
     private String path;
 
     private String isModule;
+
+    private boolean isUpdate;
+
+    public boolean isUpdate()
+    {
+        return isUpdate;
+    }
+
+    public void setIsUpdate(boolean isUpdate)
+    {
+        this.isUpdate = isUpdate;
+    }
 
     public String getName()
     {
@@ -23,12 +35,12 @@ public class WebZipItem
         this.name = name;
     }
 
-    public float getVersion()
+    public String getVersion()
     {
         return version;
     }
 
-    public void setVersion(float version)
+    public void setVersion(String version)
     {
         this.version = version;
     }
@@ -51,5 +63,17 @@ public class WebZipItem
     public void setIsModule(String isModule)
     {
         this.isModule = isModule;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "WebZipItem{" +
+                "name='" + name + '\'' +
+                ", version='" + version + '\'' +
+                ", path='" + path + '\'' +
+                ", isModule='" + isModule + '\'' +
+                ", isUpdate=" + isUpdate +
+                '}';
     }
 }

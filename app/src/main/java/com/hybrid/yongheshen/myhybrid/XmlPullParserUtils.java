@@ -43,7 +43,7 @@ public class XmlPullParserUtils
                             currentZipItem.setName(name);
                         } else if ((tagName != null) && tagName.equals("version"))
                         {
-                            float version = Float.parseFloat(xrp.getAttributeValue(null, "value"));
+                            String version = xrp.getAttributeValue(null, "value");
                             currentZipItem.setVersion(version);
                         } else if ((tagName != null) && tagName.equals("path"))
                         {
