@@ -1,9 +1,10 @@
 package com.hybrid.yongheshen.myhybrid;
 
+import android.os.Handler;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -12,14 +13,16 @@ import java.net.URL;
 /**
  * 作者： yongheshen on 15/12/17.
  */
-public class ChechApkUpdate
+public class CheckApkUpdate
 {
 
-    private CheckApkUpdateInterface mInterface;
+    private String H5UpdateUrl = "http://192.168.57.1:8080/MyWebAPI/H5UpdateServlet?APPID=101&version=1.1.0";
+    private Handler mHandler;
+    private CheckH5Update  mCheckH5Update;
 
-    public void setCheckApkUpdateInterface(CheckApkUpdateInterface checkApkUpdateInterface)
-    {
-        mInterface = checkApkUpdateInterface;
+    public CheckApkUpdate(Handler handler, CheckH5Update checkH5Update){
+        this.mHandler = handler;
+        this.mCheckH5Update = checkH5Update;
     }
 
     public void checkApkUpdate(final String urlPath, final String apkVersion)
@@ -70,16 +73,16 @@ public class ChechApkUpdate
                         System.out.println("***************" + result
                                 + "******************");
                         ApkUpdateItem item = parserApkUpdateJson(result, apkVersion);
-                        mInterface.onCheckApkUpdateSuccess(item);
+                        onCheckApkUpdateSuccess(item);
 
                     } else
                     {
                         System.out.println("------------------链接失败-----------------");
-                        mInterface.onCheckApkUpdateError();
+                        onCheckApkUpdateError();
                     }
                 } catch (Exception e)
                 {
-                    mInterface.onCheckApkUpdateError();
+                    onCheckApkUpdateError();
                     System.out.println("网络异常：" + e.getMessage());
                     e.printStackTrace();
                 }
@@ -121,9 +124,27 @@ public class ChechApkUpdate
         return item;
     }
 
-    interface CheckApkUpdateInterface
+    private void onCheckApkUpdateSuccess(ApkUpdateItem item)
     {
-        abstract void onCheckApkUpdateSuccess(ApkUpdateItem item);
-        abstract void onCheckApkUpdateError();
+        if ((item != null) && item.isUpdate())
+        {
+            if (item.getType() == 1)
+            {
+                mHandler.sendEmptyMessage(InitFramwork.APK_FOCE_SHOW);
+            } else
+            {
+                mHandler.sendEmptyMessage(InitFramwork.APK_NORMAL_SHOW);
+            }
+        } else
+        {
+            mCheckH5Update.checkApkUpdate(H5UpdateUrl, InitFramwork.webZipItems);
+        }
     }
+
+    private void onCheckApkUpdateError()
+    {
+        mHandler.sendEmptyMessage(InitFramwork.ALERT_NETERROR);
+    }
+
+
 }
