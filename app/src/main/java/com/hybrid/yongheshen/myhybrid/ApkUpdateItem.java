@@ -6,6 +6,18 @@ package com.hybrid.yongheshen.myhybrid;
  */
 public class ApkUpdateItem
 {
+    private String name;
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
     private String version;
 
     private int type;
@@ -58,7 +70,8 @@ public class ApkUpdateItem
     public String toString()
     {
         return "ApkUpdateItem{" +
-                "version='" + version + '\'' +
+                "name='" + name + '\'' +
+                ", version='" + version + '\'' +
                 ", type=" + type +
                 ", isUpdate=" + isUpdate +
                 ", path='" + path + '\'' +

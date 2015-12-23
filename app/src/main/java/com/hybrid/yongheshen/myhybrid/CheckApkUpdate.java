@@ -108,6 +108,7 @@ public class CheckApkUpdate
             String apkVersion = jsonObject.getString("APKVersion");
             int updateType = jsonObject.getInt("updateType");
             String path = jsonObject.getString("apkPath");
+            String name = jsonObject.getString("apkName");
             System.out.println("apkVersion=:" + apkVersion + "，updateType=：" + updateType + ",apkpath=:" + path);
             if (!apkVersion.equals(mApkVersion))
             {
@@ -117,6 +118,8 @@ public class CheckApkUpdate
             item.setType(updateType);
             item.setIsUpdate(isUpdateApk);
             item.setPath(path);
+            item.setName(name);
+            InitFramwork.apkUpdateItem = item;
         } catch (JSONException e)
         {
             e.printStackTrace();

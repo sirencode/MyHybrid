@@ -14,12 +14,15 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 作者： yongheshen on 15/12/11.
+ * 作者： shenyonghe689 on 15/12/11.
  */
 public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
 {
@@ -31,13 +34,23 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
 
     private String mApkVersion = "";
 
+    private String mZipPath;
+
     private AlertDialog.Builder mBuilder;
 
-    private String ApkUpdateUrl = "http://192.168.57.1:8080/MyWebAPI/UpdateServlet?APPID=101&version=1.1.0";
+    public static ApkUpdateItem apkUpdateItem;
 
-    private String H5UpdateUrl = "http://192.168.57.1:8080/MyWebAPI/H5UpdateServlet?APPID=101&version=1.1.0";
+    private String ApkUpdateUrl = "http://192.168.57" +
+            ".1:8080/MyWebAPI/UpdateServlet?APPID=101&version=1.1.0";
+
+    private String H5UpdateUrl = "http://192.168.57" +
+            ".1:8080/MyWebAPI/H5UpdateServlet?APPID=101&version=1.1.0";
+
+    private String mApkDownloadPath;
 
     private int TYPE_APK = 1, TYPE_H5 = 2;
+
+    private boolean mIsDownload;
 
     private Activity mContext;
 
@@ -47,10 +60,12 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
 
     private ProgressBar progressBar;
 
-    public static final int APK_FOCE_SHOW = 0x0001, APK_NORMAL_SHOW = 0x0002, H5_FOCE_SHOW = 0x0003, H5_NORMAL_SHOW = 0x0004;
+    public static final int APK_FOCE_SHOW = 0x0001, APK_NORMAL_SHOW = 0x0002, H5_FOCE_SHOW =
+            0x0003, H5_NORMAL_SHOW = 0x0004;
 
-    public static final int ALERT_H5ERROR = 0x0005, ALERT_NETERROR = 0x0006, ALERT_APKUPDATEERROR = 0x0007,
-            ALERT_DONEDOWNLOADAPK = 0x0008, UPDATEPROCESSBAR = 0x0009;
+    public static final int ALERT_H5ERROR = 0x0005, ALERT_NETERROR = 0x0006, ALERT_APKUPDATEERROR
+            = 0x0007, ALERT_DONEDOWNLOADAPK = 0x0008, UPDATEPROCESSBAR = 0x0009,
+            ALERT_DONEDOWNLOADH5 = 0x0010;
 
     private CheckH5Update mCheckH5Update = new CheckH5Update();
 
@@ -96,10 +111,19 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
                     ToastUtil.showToast(mContext, "更新完毕！");
                     tv_Title.setText("下载完成");
                     btnSure.setText("安装");
+                    mIsDownload = true;
+                    btnSure.setClickable(true);
                     break;
 
                 case UPDATEPROCESSBAR:
                     progressBar.setProgress(msg.arg1);
+                    break;
+
+                case ALERT_DONEDOWNLOADH5:
+                    final Intent intent = mContext.getPackageManager().getLaunchIntentForPackage
+                            (mContext.getPackageName());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    mContext.startActivity(intent);
                     break;
 
                 default:
@@ -123,6 +147,9 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
         PAGNAME = context.getPackageName();
         mApkVersion = pi.versionName;
         mBuilder = new AlertDialog.Builder(context);
+        mZipPath = "data/data/" + PAGNAME + "/webroot/download/";
+        mApkDownloadPath = Environment.getExternalStorageDirectory() +
+                "/DownLoad/";
     }
 
     public void init()
@@ -130,7 +157,6 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
         unZipRes();
         CheckApkUpdate mCheckApkUpdate = new CheckApkUpdate(mHandler, mCheckH5Update);
         mCheckH5Update.setCheckApkUpdateInterface(this);
-        mDownloadFileUtil = new DownloadFileUtil(mHandler);
         mCheckApkUpdate.checkApkUpdate(ApkUpdateUrl, mApkVersion);
     }
 
@@ -144,26 +170,37 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
         webZipItems = new ArrayList<>();
         //解析配置文件config.xml
         webZipItems = XmlPullParserUtils.getWebZipItem(mContext);
+
         mUnZipThread = new Thread(new Runnable()
         {
 
             @Override
             public void run()
             {
-                for (int i = 0; i < webZipItems.size(); i++)
+                List<String> zips = FileUtil.GetZipFileName(mZipPath);
+                if (zips == null)
                 {
-                    InputStream inputStream = mContext.getClass().getClassLoader().getResourceAsStream("assets/" + webZipItems.get(i).getPath());
-                    if (inputStream != null)
-                    {
-                        //资源包MD5校验
-                        System.out.println("MD5= :" + FileToMD5.md5sum(mContext.getClass().getClassLoader().getResourceAsStream("assets/" + webZipItems.get(i).getPath())));
-                        String desPath = "data/data/" + PAGNAME + "/webroot/";
-                        //将H5资源包解压到指定目录
-                        UnZipUtil.Unzip(inputStream, desPath);
-                    } else
-                    {
-                        mHandler.sendEmptyMessage(ALERT_H5ERROR);
-                    }
+                    AssetCopyer assetCopyer = new AssetCopyer(mContext);
+                    assetCopyer.copy();
+                    System.out.println("第一次加载");
+                }
+
+                zips = FileUtil.GetZipFileName(mZipPath);
+
+                for (int i = 0; i < zips.size(); i++)
+                {
+                    System.out.println("文件夹下的压缩包" + zips.get(i));
+                    File file = new File(mZipPath + zips.get(i));
+                    InputStream inputStream = fileToInputStream(file);
+                    System.out.println(FileToMD5.md5sum(inputStream));
+                }
+
+                for (int i = 0; i < zips.size(); i++)
+                {
+                    File file = new File(mZipPath + zips.get(i));
+                    InputStream inputStream = fileToInputStream(file);
+                    String desPath = "data/data/" + PAGNAME + "/webroot/";
+                    UnZipUtil.Unzip(inputStream, desPath);
                 }
             }
         });
@@ -189,27 +226,40 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
             {
                 progressBar.setVisibility(View.VISIBLE);
                 tv_Title.setText("开始下载，请稍后！");
-                v.setClickable(false);
                 if (type == TYPE_APK)
                 {
-                    ToastUtil.showToast(mContext, "下载APK");
-                    new Thread(new Runnable()
+                    if (!mIsDownload)
                     {
-
-                        @Override
-                        public void run()
-                        {
-                            String downloadUrl = "http://img5.duitang.com/uploads/item/201408/16/20140816224113_wM3nH.png";
-                            String name = "MeiNv.png";
-                            //创建文件夹 MyDownLoad，在存储卡下
-                            String dirName = Environment.getExternalStorageDirectory() + "/MyDownLoad/";
-                            mDownloadFileUtil.downloaKAPk(progressBar, downloadUrl, name, dirName);
-                        }
-                    }).start();
+                        mDownloadFileUtil = new DownloadFileUtil(mHandler, true);
+                        downloadApk(apkUpdateItem.getPath(), apkUpdateItem.getName());
+                    } else
+                    {
+                        AutoInstall.setUrl(mApkDownloadPath + apkUpdateItem.getName());
+                        AutoInstall.install(mContext);
+                    }
                 } else
                 {
                     ToastUtil.showToast(mContext, "下载H5");
+                    String downloadUrl = "http://qd.poms.baidupcs" +
+                            ".com/file/52cce38549d7a40837d42ae034b7b9ca?bkt=p3" +
+                            "-140052cce38549d7a40837d42ae034b7b9cad7fa241a000000000775&fid" +
+                            "=2603053207-250528-945200757085145&time=1450840405&sign=FDTAXGERLBH" +
+                            "-DCb740ccc5511e5e8fedcff06b081203-qMPyS1dq1WPex7kUWyJKL2C%2BMFg%3D" +
+                            "&to=qb&fm=Nan,B,M," +
+                            "t&sta_dx=0&sta_cs=0&sta_ft=zip&sta_ct=1&fm2=Nanjing02,B,M," +
+                            "t&newver=1&newfm=1&secfm=1&flow_ver=3&pkey" +
+                            "=140052cce38549d7a40837d42ae034b7b9cad7fa241a000000000775&sl" +
+                            "=77398095&expires=8h&rt=pr&r=232284865&mlogid=8267491484034157328" +
+                            "&vuk=2603053207&vbdid=2863254378&fin=core.zip&fn=core" +
+                            ".zip&slt=pm&uta=0&rtype=1&iv=0&isw=0&dp-logid=8267491484034157328&dp" +
+                            "-callid=0.1.1";
+                    String name = "core.zip";
+                    //创建文件夹 DownLoad，在存储卡下
+                    mDownloadFileUtil = new DownloadFileUtil(mHandler, false);
+                    mDownloadFileUtil.downloadFile(progressBar, downloadUrl, name,
+                            mZipPath);
                 }
+                v.setClickable(false);
             }
         });
         btnCancle = (Button) layout.findViewById(R.id.btn_updateCancle);
@@ -301,4 +351,28 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
     {
         mHandler.sendEmptyMessage(ALERT_NETERROR);
     }
+
+    private void downloadApk(String downloadUrl, String name)
+    {
+        ToastUtil.showToast(mContext, "下载APK");
+        //创建文件夹 MyDownLoad，在存储卡下
+        mDownloadFileUtil.downloadFile(progressBar, downloadUrl, name,
+                mApkDownloadPath);
+    }
+
+    private InputStream fileToInputStream(File file)
+    {
+        InputStream inputStream = null;
+        try
+        {
+            inputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return inputStream;
+    }
+
 }
+
+

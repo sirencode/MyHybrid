@@ -1,9 +1,11 @@
 package com.hybrid.yongheshen.myhybrid;
 
+import java.io.Serializable;
+
 /**
  * 作者： yongheshen on 15/12/10.
  */
-public class WebZipItem
+public class WebZipItem implements Serializable
 {
     private String name;
 

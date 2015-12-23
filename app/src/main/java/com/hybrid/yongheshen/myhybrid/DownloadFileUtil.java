@@ -12,18 +12,21 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * 作者： yongheshen on 15/12/18.
+ * 作者： shenyonghe689 on 15/12/18.
  */
 public class DownloadFileUtil
 {
     private Handler mHandler;
+    private boolean  mIsApk;
 
-    public DownloadFileUtil(Handler handler){
+    public DownloadFileUtil(Handler handler,boolean apk){
         this.mHandler = handler;
+        this.mIsApk = apk;
     }
 
     //下载具体操作
-    public void downloaKAPk(final ProgressBar progressBar, final String downloadUrl, final String name,final String dirName)
+    public void downloadFile(final ProgressBar progressBar, final String downloadUrl, final
+    String name, final String dirName)
     {
         new Thread(new Runnable()
         {
@@ -66,13 +69,19 @@ public class DownloadFileUtil
                         os.write(bs, 0, len);
                         tmp += len;
                         final int finalTmp = tmp;
-                        setAPKDownloadProgress(progressBar,finalTmp);
+                        setDownloadProgress(progressBar, finalTmp);
                     }
                     //完成后关闭流
                     System.out.println("download-finish");
                     os.close();
                     is.close();
-                    onDownloadApkFinish();
+                    if (mIsApk)
+                    {
+                        onDownloadApkFinish();
+                    }
+                    else {
+                        onDownloadH5Finish();
+                    }
                 } catch (Exception e)
                 {
                     downloadErro();
@@ -83,15 +92,15 @@ public class DownloadFileUtil
 
     }
 
-    public void setAPKDownloadProgress(ProgressBar pb, int progress)
+    private void setDownloadProgress(ProgressBar pb, int progress)
     {
-        Message message = new Message();
+        Message message = Message.obtain();
         message.what = InitFramwork.UPDATEPROCESSBAR;
         message.arg1 = progress;
         mHandler.sendMessage(message);
     }
 
-    public void downloadErro()
+    private void downloadErro()
     {
         mHandler.sendEmptyMessage(InitFramwork.ALERT_DONEDOWNLOADAPK);
     }
@@ -99,9 +108,17 @@ public class DownloadFileUtil
     /**
      * APK下载完成
      */
-    public void onDownloadApkFinish()
+    private void onDownloadApkFinish()
     {
         mHandler.sendEmptyMessage(InitFramwork.ALERT_DONEDOWNLOADAPK);
+    }
+
+    /**
+     * H5下载完成
+     */
+    private void onDownloadH5Finish()
+    {
+        mHandler.sendEmptyMessage(InitFramwork.ALERT_DONEDOWNLOADH5);
     }
 
 }
