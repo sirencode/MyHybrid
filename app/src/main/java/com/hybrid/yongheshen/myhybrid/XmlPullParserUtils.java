@@ -49,10 +49,16 @@ public class XmlPullParserUtils
                         {
                             String path = xrp.getAttributeValue(null, "value");
                             currentZipItem.setPath(path);
-                        } else if ((tagName != null) && tagName.equals("isModule"))
+                        }
+                        else if ((tagName != null) && tagName.equals("url_apk_check_upgrade"))
                         {
-                            String isModule = xrp.getAttributeValue(null, "value");
-                            currentZipItem.setIsModule(isModule);
+                            String apkUpdateUrl = xrp.getAttributeValue(null, "value");
+                            InitFramwork.ApkUpdateUrl = apkUpdateUrl;
+                        }
+                        else if ((tagName != null) && tagName.equals("url_module_check_upgrade"))
+                        {
+                            String h5UpdateUrl = xrp.getAttributeValue(null, "value");
+                            InitFramwork.H5UpdateUrl = h5UpdateUrl;
                         }
                         break;
                     case XmlPullParser.TEXT:
@@ -86,7 +92,6 @@ public class XmlPullParserUtils
             System.out.println("Items info ====");
             System.out.println("name = " + zipItems.get(i).getName());
             System.out.println("path = " + zipItems.get(i).getPath());
-            System.out.println("isM = " + zipItems.get(i).getIsModule());
             System.out.println("version = " + zipItems.get(i).getVersion());
         }
 

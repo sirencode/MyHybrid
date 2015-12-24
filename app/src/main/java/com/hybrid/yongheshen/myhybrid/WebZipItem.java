@@ -13,7 +13,17 @@ public class WebZipItem implements Serializable
 
     private String path;
 
-    private String isModule;
+    private String md5;
+
+    public String getMd5()
+    {
+        return md5;
+    }
+
+    public void setMd5(String md5)
+    {
+        this.md5 = md5;
+    }
 
     private boolean isUpdate;
 
@@ -57,16 +67,6 @@ public class WebZipItem implements Serializable
         this.path = path;
     }
 
-    public String getIsModule()
-    {
-        return isModule;
-    }
-
-    public void setIsModule(String isModule)
-    {
-        this.isModule = isModule;
-    }
-
     @Override
     public String toString()
     {
@@ -74,7 +74,7 @@ public class WebZipItem implements Serializable
                 "name='" + name + '\'' +
                 ", version='" + version + '\'' +
                 ", path='" + path + '\'' +
-                ", isModule='" + isModule + '\'' +
+                ", md5='" + md5 + '\'' +
                 ", isUpdate=" + isUpdate +
                 '}';
     }

@@ -49,10 +49,10 @@ TAG标签内的参数：在TAG标签内配置的参数受限于“CONFIG_TAG”�
     <!-- 3) 、版本控制配置 -->
     <!-- 检查apk升级地址，请求参数及返回格式见“版本控制接口文档” -->
     <url_apk_check_upgrade
-        value="https://test1-smbac.pingan.com.cn:28443/fces/rest/fces/version/native-version"/>
+        value="http://192.168.57.1:8080/MyWebAPI/UpdateServlet"/>
     <!-- 资源包升级地址，请求参数及返回格式见“版本控制接口文档” -->
     <url_module_check_upgrade
-        value="https://test1-smbac.pingan.com.cn:28443/fces/rest/fces/version/h5-version"/>
+        value="http://192.168.57.1:8080/MyWebAPI/H5UpdateServlet"/>
     <!-- webview代理字符串，提供h5判断客户端来源使用 -->
     <webview_user_agent value="WebView"/>
     <app_name value="demo"/>

@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -19,9 +20,11 @@ public class CheckH5Update
 
     private CheckH5UpdateInterface mInterface;
 
-    public void setCheckApkUpdateInterface(CheckH5UpdateInterface checkH5UpdateInterface){
+    public void setCheckApkUpdateInterface(CheckH5UpdateInterface checkH5UpdateInterface)
+    {
         mInterface = checkH5UpdateInterface;
     }
+
     public void checkApkUpdate(final String urlPath, final List<WebZipItem> webZipItems)
     {
         new Thread(new Runnable()
@@ -43,7 +46,8 @@ public class CheckH5Update
                     // 设置请求的头
                     urlConnection
                             .setRequestProperty("User-Agent",
-                                    "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0");
+                                    "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) Gecko/20100101 " +
+                                            "Firefox/27.0");
                     // 获取响应的状态码 404 200 505 302
                     if (urlConnection.getResponseCode() == 200)
                     {
@@ -69,7 +73,7 @@ public class CheckH5Update
                         String result = new String(os.toByteArray());
                         System.out.println("***************" + result
                                 + "******************");
-                        List<WebZipItem> items = parserH5UpdateJson(result,webZipItems);
+                        List<WebZipItem> items = parserH5UpdateJson(result, webZipItems);
                         mInterface.onCheckH5UpdateSuccess(items);
 
                     } else
@@ -80,7 +84,7 @@ public class CheckH5Update
                     }
                 } catch (Exception e)
                 {
-                    //                   onError("网络连接异常，请检查网络");
+                    mInterface.onCheckH5UpdateError();
                     System.out.println("网络异常：" + e.getMessage());
                     e.printStackTrace();
                 }
@@ -95,7 +99,7 @@ public class CheckH5Update
      * @param updateInfo
      * @return
      */
-    private List<WebZipItem> parserH5UpdateJson(String updateInfo,List<WebZipItem> webZipItems)
+    private List<WebZipItem> parserH5UpdateJson(String updateInfo, List<WebZipItem> webZipItems)
     {
         List<WebZipItem> items = new ArrayList<>();
         boolean isUpdateH5 = false;
@@ -110,20 +114,29 @@ public class CheckH5Update
                 String name = jsonObject.getString("name");
                 String version = jsonObject.getString("version");
                 String path = jsonObject.getString("path");
-                System.out.println("name=:" + name + "，version=：" + version + "，path=：" + path);
-                for (int j = 0; j < webZipItems.size(); j++)
+                String md5 = jsonObject.getString("md5");
+                System.out.println("name=:" + name + "，md5=：" + md5);
+                for (int j = 0; j < InitFramwork.mZipList.size(); j++)
                 {
-                    if (webZipItems.get(j).getName().equals(name) && !webZipItems.get(j).getVersion().equals(version))
+                    File file = new File(InitFramwork.mZipPath + InitFramwork.mZipList.get(j));
+                    InputStream inputStream = InitFramwork.fileToInputStream(file);
+                    String zipMd5 = FileToMD5.md5sum(inputStream);
+                    System.out.println(zipMd5);
+                    if (InitFramwork.mZipList.contains(name) && zipMd5.equals(md5))
+                    {
+                        isUpdateH5 = false;
+                        break;
+                    } else
                     {
                         isUpdateH5 = true;
                     }
                 }
-                item.setIsModule("N");
                 item.setIsUpdate(isUpdateH5);
                 item.setName(name);
                 item.setVersion(version);
                 item.setPath(path);
-                System.out.println(item.toString());
+                item.setMd5(md5);
+                System.out.println(item.getName()+item.getMd5());
                 items.add(item);
             }
 
@@ -134,7 +147,8 @@ public class CheckH5Update
         return items;
     }
 
-    interface CheckH5UpdateInterface{
+    interface CheckH5UpdateInterface
+    {
         abstract void onCheckH5UpdateSuccess(List<WebZipItem> items);
         abstract void onCheckH5UpdateError();
     }
