@@ -37,18 +37,18 @@ public class XmlPullParserUtils
                         if ((tagName != null) && tagName.equals("item"))
                         {
                             currentZipItem = new WebZipItem();
-                        } else if ((tagName != null) && tagName.equals("name"))
+                        } else if ((tagName != null) && tagName.equals("moduleName"))
                         {
-                            String name = xrp.getAttributeValue(null, "value");
-                            currentZipItem.setName(name);
-                        } else if ((tagName != null) && tagName.equals("version"))
+                            String moduleName = xrp.getAttributeValue(null, "value");
+                            currentZipItem.setModuleName(moduleName);
+                        } else if ((tagName != null) && tagName.equals("updateUrl"))
                         {
-                            String version = xrp.getAttributeValue(null, "value");
-                            currentZipItem.setVersion(version);
-                        } else if ((tagName != null) && tagName.equals("path"))
+                            String updateUrl = xrp.getAttributeValue(null, "value");
+                            currentZipItem.setUpdateUrl(updateUrl);
+                        } else if ((tagName != null) && tagName.equals("moduleMd5"))
                         {
-                            String path = xrp.getAttributeValue(null, "value");
-                            currentZipItem.setPath(path);
+                            String moduleMd5 = xrp.getAttributeValue(null, "value");
+                            currentZipItem.setModuleMd5(moduleMd5);
                         }
                         else if ((tagName != null) && tagName.equals("url_apk_check_upgrade"))
                         {
@@ -90,9 +90,9 @@ public class XmlPullParserUtils
         for (int i = 0; i < zipItems.size(); i++)
         {
             System.out.println("Items info ====");
-            System.out.println("name = " + zipItems.get(i).getName());
-            System.out.println("path = " + zipItems.get(i).getPath());
-            System.out.println("version = " + zipItems.get(i).getVersion());
+            System.out.println("name = " + zipItems.get(i).getModuleName());
+            System.out.println("path = " + zipItems.get(i).getUpdateUrl());
+            System.out.println("version = " + zipItems.get(i).getModuleMd5());
         }
 
         return zipItems;

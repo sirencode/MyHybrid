@@ -74,18 +74,16 @@ TAG标签内的参数：在TAG标签内配置的参数受限于“CONFIG_TAG”�
     <webresource type="list">
         <item>
             <!-- 模块名 -->
-            <name value="core.zip"/>
+            <moduleName value="core.zip"/>
             <!-- 版本号 -->
-            <version value="1.0"/>
+            <moduleMd5 value="F52E5D5659CEB444363AED98F56B0819"/>
             <!-- 打包到apk中assets目录下到资源包 -->
-            <path value="/core.zip"/>
-            <isModule value="N"/>
+            <updateUrl value="/core.zip"/>
         </item>
         <!--<item>-->
         <!--<name value="webapp"/>-->
         <!--<version value="1"/>-->
         <!--<path value="www/webapp.zip"/>-->
-        <!--<isModule value="Y"/>-->
         <!--</item>-->
     </webresource>
 

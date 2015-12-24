@@ -105,20 +105,23 @@ public class CheckApkUpdate
         try
         {
             JSONObject jsonObject = (JSONObject) jsonTokener.nextValue();
-            String apkVersion = jsonObject.getString("APKVersion");
-            int updateType = jsonObject.getInt("updateType");
-            String path = jsonObject.getString("apkPath");
-            String name = jsonObject.getString("apkName");
-            System.out.println("apkVersion=:" + apkVersion + "，updateType=：" + updateType + ",apkpath=:" + path);
-            if (!apkVersion.equals(mApkVersion))
+            String lastAppVersion = jsonObject.getString("lastAppVersion");
+            String updateFlag = jsonObject.getString("updateFlag");
+            String updateMsg = jsonObject.getString("updateMsg");
+            String appDownLoadUrl = jsonObject.getString("appDownLoadUrl");
+            String appSize = jsonObject.getString("appSize");
+            String appName = jsonObject.getString("appName");
+            if (!lastAppVersion.equals(mApkVersion))
             {
                 isUpdateApk = true;
             }
-            item.setVersion(mApkVersion);
-            item.setType(updateType);
+            item.setLastAppVersion(lastAppVersion);
+            item.setUpdateMsg(updateMsg);
             item.setIsUpdate(isUpdateApk);
-            item.setPath(path);
-            item.setName(name);
+            item.setAppDownLoadUrl(appDownLoadUrl);
+            item.setAppName(appName);
+            item.setUpdateFlag(updateFlag);
+            item.setAppSize(appSize);
             InitFramwork.apkUpdateItem = item;
         } catch (JSONException e)
         {
@@ -131,12 +134,15 @@ public class CheckApkUpdate
     {
         if ((item != null) && item.isUpdate())
         {
-            if (item.getType() == 1)
+            if (item.getUpdateFlag().equals("2"))
             {
                 mHandler.sendEmptyMessage(InitFramwork.APK_FOCE_SHOW);
-            } else
+            } else if(item.getUpdateFlag().equals("1"))
             {
                 mHandler.sendEmptyMessage(InitFramwork.APK_NORMAL_SHOW);
+            }else
+            {
+                System.out.println("未知的升级标志");
             }
         } else
         {

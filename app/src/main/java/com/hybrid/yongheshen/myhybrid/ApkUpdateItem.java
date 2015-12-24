@@ -6,34 +6,48 @@ package com.hybrid.yongheshen.myhybrid;
  */
 public class ApkUpdateItem
 {
-    private String name;
+    private String appDownLoadUrl;
 
-    public String getName()
-    {
-        return name;
-    }
+    private String lastAppVersion;
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    private String version;
-
-    private int type;
+    private String updateMsg;
 
     private boolean isUpdate;
 
-    private String path;
+    private String updateFlag;
 
-    public String getPath()
+    private String appSize;
+
+    private String appName;
+
+    public String getAppDownLoadUrl()
     {
-        return path;
+        return appDownLoadUrl;
     }
 
-    public void setPath(String path)
+    public void setAppDownLoadUrl(String appDownLoadUrl)
     {
-        this.path = path;
+        this.appDownLoadUrl = appDownLoadUrl;
+    }
+
+    public String getLastAppVersion()
+    {
+        return lastAppVersion;
+    }
+
+    public void setLastAppVersion(String lastAppVersion)
+    {
+        this.lastAppVersion = lastAppVersion;
+    }
+
+    public String getUpdateMsg()
+    {
+        return updateMsg;
+    }
+
+    public void setUpdateMsg(String updateMsg)
+    {
+        this.updateMsg = updateMsg;
     }
 
     public boolean isUpdate()
@@ -46,35 +60,47 @@ public class ApkUpdateItem
         this.isUpdate = isUpdate;
     }
 
-    public String getVersion()
+    public String getUpdateFlag()
     {
-        return version;
+        return updateFlag;
     }
 
-    public void setVersion(String version)
+    public void setUpdateFlag(String updateFlag)
     {
-        this.version = version;
+        this.updateFlag = updateFlag;
     }
 
-    public int getType()
+    public String getAppSize()
     {
-        return type;
+        return appSize;
     }
 
-    public void setType(int type)
+    public void setAppSize(String appSize)
     {
-        this.type = type;
+        this.appSize = appSize;
+    }
+
+    public String getAppName()
+    {
+        return appName;
+    }
+
+    public void setAppName(String appName)
+    {
+        this.appName = appName;
     }
 
     @Override
     public String toString()
     {
         return "ApkUpdateItem{" +
-                "name='" + name + '\'' +
-                ", version='" + version + '\'' +
-                ", type=" + type +
+                "appDownLoadUrl='" + appDownLoadUrl + '\'' +
+                ", lastAppVersion='" + lastAppVersion + '\'' +
+                ", updateMsg='" + updateMsg + '\'' +
                 ", isUpdate=" + isUpdate +
-                ", path='" + path + '\'' +
+                ", updateFlag='" + updateFlag + '\'' +
+                ", appSize='" + appSize + '\'' +
+                ", appName='" + appName + '\'' +
                 '}';
     }
 }

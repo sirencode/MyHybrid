@@ -48,7 +48,9 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
 
     public static String H5UpdateUrl;
 
-    private String mUrlParams = "?APPID=101&version=1.1.0";
+    private String mApkUrlParams = "?appID=101&platform=Android";
+
+    private String mH5UrlParams;
 
     private String mApkDownloadPath;
 
@@ -155,6 +157,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
         mZipPath = "data/data/" + PAGNAME + "/webroot/download/";
         mApkDownloadPath = Environment.getExternalStorageDirectory() +
                 "/DownLoad/";
+        mH5UrlParams = "?appID=101&appVersion="+mApkVersion+"&platform=Android";
     }
 
     public void init()
@@ -167,7 +170,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
             ToastUtil.showToast(mContext, "找不到APK的更新地址");
         } else
         {
-            mCheckApkUpdate.checkApkUpdate(ApkUpdateUrl + mUrlParams, mApkVersion);
+            mCheckApkUpdate.checkApkUpdate(ApkUpdateUrl + mApkUrlParams, mApkVersion);
         }
 
     }
@@ -243,10 +246,10 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
                 {
                     if (!mIsDownload)
                     {
-                        downloadApk(apkUpdateItem.getPath(), apkUpdateItem.getName());
+                        downloadApk(apkUpdateItem.getAppDownLoadUrl(), apkUpdateItem.getAppName());
                     } else
                     {
-                        AutoInstall.setUrl(mApkDownloadPath + apkUpdateItem.getName());
+                        AutoInstall.setUrl(mApkDownloadPath + apkUpdateItem.getAppName());
                         AutoInstall.install(mContext);
                     }
                 } else
@@ -263,7 +266,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
         btnCancle = (Button) layout.findViewById(R.id.btn_updateCancle);
         if (type == TYPE_APK)
         {
-            tv_Title.setText("您的APK需要升级,是否现在升级");
+            tv_Title.setText(apkUpdateItem.getUpdateMsg());
         } else
         {
             tv_Title.setText("您的资源包需要升级,是否现在升级");
@@ -286,7 +289,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
                     }
                     else
                     {
-                        mCheckH5Update.checkApkUpdate(H5UpdateUrl+ mUrlParams, webZipItems);
+                        mCheckH5Update.checkApkUpdate(H5UpdateUrl+ mH5UrlParams, webZipItems);
                     }
                 } else
                 {
@@ -335,9 +338,9 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
         for (int i = 0; i < items.size(); i++)
         {
             WebZipItem tmp = items.get(i);
-            if (tmp.isUpdate())
+            if (tmp.isNeedUpdate())
             {
-                System.out.println("<======updata========>" + tmp.getName()+tmp.getMd5());
+                System.out.println("<======updata========>" + tmp.getModuleName()+tmp.getModuleMd5());
                 mUpdateWebZips.add(tmp);
             }
         }

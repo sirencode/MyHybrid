@@ -111,18 +111,17 @@ public class CheckH5Update
             {
                 WebZipItem item = new WebZipItem();
                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                String name = jsonObject.getString("name");
-                String version = jsonObject.getString("version");
-                String path = jsonObject.getString("path");
-                String md5 = jsonObject.getString("md5");
-                System.out.println("name=:" + name + "，md5=：" + md5);
+                String moduleName = jsonObject.getString("moduleName");
+                String updateUrl = jsonObject.getString("updateUrl");
+                String moduleMd5 = jsonObject.getString("moduleMd5");
+                System.out.println("name=:" + moduleName + "，md5=：" + moduleMd5);
                 for (int j = 0; j < InitFramwork.mZipList.size(); j++)
                 {
                     File file = new File(InitFramwork.mZipPath + InitFramwork.mZipList.get(j));
                     InputStream inputStream = InitFramwork.fileToInputStream(file);
                     String zipMd5 = FileToMD5.md5sum(inputStream);
                     System.out.println(zipMd5);
-                    if (InitFramwork.mZipList.contains(name) && zipMd5.equals(md5))
+                    if (InitFramwork.mZipList.contains(moduleName) && zipMd5.equals(moduleMd5))
                     {
                         isUpdateH5 = false;
                         break;
@@ -131,12 +130,11 @@ public class CheckH5Update
                         isUpdateH5 = true;
                     }
                 }
-                item.setIsUpdate(isUpdateH5);
-                item.setName(name);
-                item.setVersion(version);
-                item.setPath(path);
-                item.setMd5(md5);
-                System.out.println(item.getName()+item.getMd5());
+                item.setIsNeedUpdate(isUpdateH5);
+                item.setModuleName(moduleName);
+                item.setUpdateUrl(updateUrl);
+                item.setModuleMd5(moduleMd5);
+                System.out.println(item.getModuleName()+item.getModuleMd5());
                 items.add(item);
             }
 

@@ -111,7 +111,7 @@ public class DownloadFileUtil
                 {
                     try
                     {
-                        URL url = new URL(list.get(i).getPath());
+                        URL url = new URL(list.get(i).getUpdateUrl());
                         //打开连接
                         URLConnection conn = url.openConnection();
                         //打开输入流
@@ -133,7 +133,7 @@ public class DownloadFileUtil
                     WebZipItem item = list.get(j);
                     try
                     {
-                        URL url = new URL(item.getPath());
+                        URL url = new URL(item.getUpdateUrl());
                         //打开连接
                         URLConnection conn = url.openConnection();
                         //打开输入流
@@ -149,7 +149,7 @@ public class DownloadFileUtil
                             file.mkdir();
                         }
                         //下载后的文件名
-                        String fileName = dirName + item.getName();
+                        String fileName = dirName + item.getModuleName();
                         File file1 = new File(fileName);
                         if (file1.exists())
                         {

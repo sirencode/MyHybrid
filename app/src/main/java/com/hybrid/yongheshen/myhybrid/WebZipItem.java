@@ -7,75 +7,62 @@ import java.io.Serializable;
  */
 public class WebZipItem implements Serializable
 {
-    private String name;
+    private String moduleName;
 
-    private String version;
+    private String updateUrl;
 
-    private String path;
+    private String moduleMd5;
 
-    private String md5;
+    private boolean isNeedUpdate;
 
-    public String getMd5()
+    public boolean isNeedUpdate()
     {
-        return md5;
+        return isNeedUpdate;
     }
 
-    public void setMd5(String md5)
+    public void setIsNeedUpdate(boolean isNeedUpdate)
     {
-        this.md5 = md5;
+        this.isNeedUpdate = isNeedUpdate;
     }
 
-    private boolean isUpdate;
-
-    public boolean isUpdate()
+    public String getModuleName()
     {
-        return isUpdate;
+        return moduleName;
     }
 
-    public void setIsUpdate(boolean isUpdate)
+    public void setModuleName(String moduleName)
     {
-        this.isUpdate = isUpdate;
+        this.moduleName = moduleName;
     }
 
-    public String getName()
+    public String getUpdateUrl()
     {
-        return name;
+        return updateUrl;
     }
 
-    public void setName(String name)
+    public void setUpdateUrl(String updateUrl)
     {
-        this.name = name;
+        this.updateUrl = updateUrl;
     }
 
-    public String getVersion()
+    public String getModuleMd5()
     {
-        return version;
+        return moduleMd5;
     }
 
-    public void setVersion(String version)
+    public void setModuleMd5(String moduleMd5)
     {
-        this.version = version;
-    }
-
-    public String getPath()
-    {
-        return path;
-    }
-
-    public void setPath(String path)
-    {
-        this.path = path;
+        this.moduleMd5 = moduleMd5;
     }
 
     @Override
     public String toString()
     {
         return "WebZipItem{" +
-                "name='" + name + '\'' +
-                ", version='" + version + '\'' +
-                ", path='" + path + '\'' +
-                ", md5='" + md5 + '\'' +
-                ", isUpdate=" + isUpdate +
+                "moduleName='" + moduleName + '\'' +
+                ", updateUrl='" + updateUrl + '\'' +
+                ", moduleMd5='" + moduleMd5 + '\'' +
+                ", isNeedUpdate=" + isNeedUpdate +
                 '}';
     }
 }
