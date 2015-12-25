@@ -53,12 +53,12 @@ public class XmlPullParserUtils
                         else if ((tagName != null) && tagName.equals("url_apk_check_upgrade"))
                         {
                             String apkUpdateUrl = xrp.getAttributeValue(null, "value");
-                            InitFramwork.ApkUpdateUrl = apkUpdateUrl;
+                            InitFramwork.ApkUpdateUrl = apkUpdateUrl+InitFramwork.mApkUrlParams;
                         }
                         else if ((tagName != null) && tagName.equals("url_module_check_upgrade"))
                         {
                             String h5UpdateUrl = xrp.getAttributeValue(null, "value");
-                            InitFramwork.H5UpdateUrl = h5UpdateUrl;
+                            InitFramwork.H5UpdateUrl = h5UpdateUrl+InitFramwork.mH5UrlParams;
                         }
                         break;
                     case XmlPullParser.TEXT:

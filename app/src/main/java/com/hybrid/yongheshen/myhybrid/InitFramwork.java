@@ -28,9 +28,9 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
 {
     private Thread mUnZipThread, mJumpThread;
 
-    public static List<WebZipItem> webZipItems;
-
     private List<WebZipItem> mUpdateWebZips;
+
+    public static List<WebZipItem> webZipItems;
 
     public static List<String> mZipList;
 
@@ -40,17 +40,15 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
 
     public static String mZipPath;
 
-    private AlertDialog.Builder mBuilder;
-
     public static ApkUpdateItem apkUpdateItem;
 
     public static String ApkUpdateUrl;
 
     public static String H5UpdateUrl;
 
-    private String mApkUrlParams = "?appID=101&platform=Android";
+    public static String mApkUrlParams = "?appID=101&platform=Android";
 
-    private String mH5UrlParams;
+    public static String mH5UrlParams;
 
     private String mApkDownloadPath;
 
@@ -59,6 +57,8 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
     private boolean mIsDownload;
 
     private Activity mContext;
+
+    private AlertDialog.Builder mBuilder;
 
     private TextView tv_Title;
 
@@ -170,7 +170,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
             ToastUtil.showToast(mContext, "找不到APK的更新地址");
         } else
         {
-            mCheckApkUpdate.checkApkUpdate(ApkUpdateUrl + mApkUrlParams, mApkVersion);
+            mCheckApkUpdate.checkApkUpdate(ApkUpdateUrl, mApkVersion);
         }
 
     }
@@ -289,7 +289,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
                     }
                     else
                     {
-                        mCheckH5Update.checkApkUpdate(H5UpdateUrl+ mH5UrlParams, webZipItems);
+                        mCheckH5Update.checkApkUpdate(H5UpdateUrl, webZipItems);
                     }
                 } else
                 {

@@ -11,12 +11,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * 作者： yongheshen on 15/12/17.
+ * 作者： shenyonghe689 on 15/12/17.
  */
 public class CheckApkUpdate
 {
 
-    private String H5UpdateUrl = "http://192.168.57.1:8080/MyWebAPI/H5UpdateServlet?APPID=101&version=1.1.0";
     private Handler mHandler;
     private CheckH5Update  mCheckH5Update;
 
@@ -146,7 +145,7 @@ public class CheckApkUpdate
             }
         } else
         {
-            mCheckH5Update.checkApkUpdate(H5UpdateUrl, InitFramwork.webZipItems);
+            mCheckH5Update.checkApkUpdate(InitFramwork.H5UpdateUrl, InitFramwork.webZipItems);
         }
     }
 

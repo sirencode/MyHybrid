@@ -71,7 +71,6 @@ public class DownloadFileUtil
                     {
                         os.write(bs, 0, len);
                         tmp += len;
-                        System.out.println(len);
                         final int finalTmp = tmp;
                         setDownloadProgress(progressBar, finalTmp);
                     }
@@ -122,6 +121,7 @@ public class DownloadFileUtil
                         System.out.println("contentLength = " + contentLength);
                     } catch (IOException e)
                     {
+                        downloadErro();
                         e.printStackTrace();
                     }
                 }
@@ -165,7 +165,6 @@ public class DownloadFileUtil
                         {
                             os.write(bs, 0, len);
                             tmp += len;
-                            System.out.println(len);
                             final int finalTmp = tmp;
                             setDownloadProgress(progressBar, finalTmp);
                         }
