@@ -21,7 +21,7 @@ public class XmlPullParserUtils
         List<WebZipItem> zipItems = new ArrayList<WebZipItem>();
         try
         {
-            XmlResourceParser xrp = context.getResources().getXml(R.xml.config);
+            XmlResourceParser xrp = context.getResources().getXml(R.xml.myhybridconfig);
             // 获取到xml文件时，XmlResourceParser的是指向文档开始处
             eventType = xrp.getEventType();
             // System.out.println("-->"+eventType);//查看事件的数值
@@ -53,12 +53,21 @@ public class XmlPullParserUtils
                         else if ((tagName != null) && tagName.equals("url_apk_check_upgrade"))
                         {
                             String apkUpdateUrl = xrp.getAttributeValue(null, "value");
-                            InitFramwork.ApkUpdateUrl = apkUpdateUrl+InitFramwork.mApkUrlParams;
+                            MyHybridConfig.ApkUpdateUrl = apkUpdateUrl+"?appID="+MyHybridConfig.APPID+"&platform=Android";
                         }
                         else if ((tagName != null) && tagName.equals("url_module_check_upgrade"))
                         {
                             String h5UpdateUrl = xrp.getAttributeValue(null, "value");
-                            InitFramwork.H5UpdateUrl = h5UpdateUrl+InitFramwork.mH5UrlParams;
+                            String h5UrlParams = "?appID="+MyHybridConfig.APPID+"&appVersion=" + MyHybridConfig.ApkVersion + "&platform=Android";
+                            MyHybridConfig.H5UpdateUrl = h5UpdateUrl+h5UrlParams;
+                        }else if ((tagName != null) && tagName.equals("CONFIG_TAG"))
+                        {
+                            String environment = xrp.getAttributeValue(null, "value");
+                            MyHybridConfig.Evnvionment = environment;
+                        }else if ((tagName != null) && tagName.equals("APPID"))
+                        {
+                            String appid = xrp.getAttributeValue(null, "value");
+                            MyHybridConfig.APPID = appid;
                         }
                         break;
                     case XmlPullParser.TEXT:
@@ -79,6 +88,7 @@ public class XmlPullParserUtils
             }
         } catch (Exception e)
         {
+            System.out.println("配置文件解析错误");
             e.printStackTrace();
         }
         //判断事件类型是不是文档结束

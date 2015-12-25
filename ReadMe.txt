@@ -37,7 +37,7 @@
    http get请求
    序号	   字段名称	              字段类型	字段说明	约束条件	 是否必输	      备注
    输入信息 获取Native版本控制信息（参数信息）
-   1    	appID	               String	app编号	　	        Y	    10001 台州  10002 银座
+   1    	appID	               String	app编号	　	        Y	      APP在集团的注册ID
    2	platform	               String	IOS/Android	　	    Y
    　
    输出
@@ -56,12 +56,12 @@
    序号	      字段名称	          字段类型	 字段说明	 约束条件	  是否必输	  备注
    输入信息 获取H5版本控制信息
    1    	appID	               String	app编号	            Y	　	10001台州10002 银座
-   2	appVersion	               String	当前版本号	        Y	　	1.0.0
-   3	platform	               String	IOS/Android	Y	　	　
+   2	appVersion	               String	当前版本号	        Y	　	1.0.0(根据版本来返回，对应版本的最新资源包)
+   3	platform	               String	IOS/Android	        Y	　	　
    输出
    versionList版本列表 START
    1    moduleName	               String	模块名	　	                core.zip　	　
-   2    updateUrl	               String	升级地址	　	　	　          http://wwww...........xx.zip
+   2    updateUrl	               String	升级地址	　	　	　           http://wwww...........xx.zip
    3  	moduleMd5	               String	当前资源包的md5值	　	　	    52CCE38549D7A40837D42AE034B7B9CA
 
    { 'zips': [{ 'moduleName':'core.zip','updateUrl': '"+corePath+"','moduleMd5':'52CCE38549D7A40837D42AE034B7B9CA'},

@@ -121,7 +121,7 @@ public class CheckApkUpdate
             item.setAppName(appName);
             item.setUpdateFlag(updateFlag);
             item.setAppSize(appSize);
-            InitFramwork.apkUpdateItem = item;
+            MyHybridConfig.ApkUpdateItem = item;
         } catch (JSONException e)
         {
             e.printStackTrace();
@@ -135,23 +135,23 @@ public class CheckApkUpdate
         {
             if (item.getUpdateFlag().equals("2"))
             {
-                mHandler.sendEmptyMessage(InitFramwork.APK_FOCE_SHOW);
+                mHandler.sendEmptyMessage(MyHybridConfig.APK_FOCE_SHOW);
             } else if(item.getUpdateFlag().equals("1"))
             {
-                mHandler.sendEmptyMessage(InitFramwork.APK_NORMAL_SHOW);
+                mHandler.sendEmptyMessage(MyHybridConfig.APK_NORMAL_SHOW);
             }else
             {
                 System.out.println("未知的升级标志");
             }
         } else
         {
-            mCheckH5Update.checkApkUpdate(InitFramwork.H5UpdateUrl, InitFramwork.webZipItems);
+            mCheckH5Update.checkApkUpdate(MyHybridConfig.H5UpdateUrl, MyHybridConfig.WebZipItems);
         }
     }
 
     private void onCheckApkUpdateError()
     {
-        mHandler.sendEmptyMessage(InitFramwork.ALERT_NETERROR);
+        mHandler.sendEmptyMessage(MyHybridConfig.ALERT_NETERROR);
     }
 
 

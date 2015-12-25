@@ -30,25 +30,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
 
     private List<WebZipItem> mUpdateWebZips;
 
-    public static List<WebZipItem> webZipItems;
-
-    public static List<String> mZipList;
-
     private String PAGNAME = "";
-
-    private String mApkVersion = "";
-
-    public static String mZipPath;
-
-    public static ApkUpdateItem apkUpdateItem;
-
-    public static String ApkUpdateUrl;
-
-    public static String H5UpdateUrl;
-
-    public static String mApkUrlParams = "?appID=101&platform=Android";
-
-    public static String mH5UrlParams;
 
     private String mApkDownloadPath;
 
@@ -66,13 +48,6 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
 
     private ProgressBar progressBar;
 
-    public static final int APK_FOCE_SHOW = 0x0001, APK_NORMAL_SHOW = 0x0002, H5_FOCE_SHOW =
-            0x0003, H5_NORMAL_SHOW = 0x0004;
-
-    public static final int ALERT_H5ERROR = 0x0005, ALERT_NETERROR = 0x0006, ALERT_APKUPDATEERROR
-            = 0x0007, ALERT_DONEDOWNLOADAPK = 0x0008, UPDATEPROCESSBAR = 0x0009,
-            ALERT_DONEDOWNLOADH5 = 0x0010;
-
     private CheckH5Update mCheckH5Update = new CheckH5Update();
 
     private DownloadFileUtil mDownloadFileUtil;
@@ -85,35 +60,35 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
         {
             switch (msg.what)
             {
-                case APK_FOCE_SHOW:
+                case MyHybridConfig.APK_FOCE_SHOW:
                     onShowUpdateInfo(TYPE_APK, true);
                     break;
 
-                case APK_NORMAL_SHOW:
+                case MyHybridConfig.APK_NORMAL_SHOW:
                     onShowUpdateInfo(TYPE_APK, false);
                     break;
 
-                case H5_FOCE_SHOW:
+                case MyHybridConfig.H5_FOCE_SHOW:
                     onShowUpdateInfo(TYPE_H5, true);
                     break;
 
-                case H5_NORMAL_SHOW:
+                case MyHybridConfig.H5_NORMAL_SHOW:
                     onShowUpdateInfo(TYPE_H5, false);
                     break;
 
-                case ALERT_H5ERROR:
+                case MyHybridConfig.ALERT_H5ERROR:
                     ToastUtil.showToast(mContext, "H5资源包找不到了！");
                     break;
 
-                case ALERT_NETERROR:
+                case MyHybridConfig.ALERT_NETERROR:
                     ToastUtil.showToast(mContext, "网络异常！");
                     break;
 
-                case ALERT_APKUPDATEERROR:
+                case MyHybridConfig.ALERT_APKUPDATEERROR:
                     ToastUtil.showToast(mContext, "应用更新失败，请重试！");
                     break;
 
-                case ALERT_DONEDOWNLOADAPK:
+                case MyHybridConfig.ALERT_DONEDOWNLOADAPK:
                     ToastUtil.showToast(mContext, "更新完毕！");
                     tv_Title.setText("下载完成");
                     btnSure.setText("安装");
@@ -121,11 +96,11 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
                     btnSure.setClickable(true);
                     break;
 
-                case UPDATEPROCESSBAR:
+                case MyHybridConfig.UPDATEPROCESSBAR:
                     progressBar.setProgress(msg.arg1);
                     break;
 
-                case ALERT_DONEDOWNLOADH5:
+                case MyHybridConfig.ALERT_DONEDOWNLOADH5:
                     mUpdateWebZips = null;
                     final Intent intent = mContext.getPackageManager().getLaunchIntentForPackage
                             (mContext.getPackageName());
@@ -152,25 +127,40 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
             e.printStackTrace();
         }
         PAGNAME = context.getPackageName();
-        mApkVersion = pi.versionName;
+        MyHybridConfig.ApkVersion = pi.versionName;
         mBuilder = new AlertDialog.Builder(context);
-        mZipPath = "data/data/" + PAGNAME + "/webroot/download/";
+        MyHybridConfig.ZipPath = "data/data/" + PAGNAME + "/webroot/download/";
         mApkDownloadPath = Environment.getExternalStorageDirectory() +
                 "/DownLoad/";
-        mH5UrlParams = "?appID=101&appVersion="+mApkVersion+"&platform=Android";
     }
 
     public void init()
     {
-        unZipRes();
-        CheckApkUpdate mCheckApkUpdate = new CheckApkUpdate(mHandler, mCheckH5Update);
-        mCheckH5Update.setCheckApkUpdateInterface(this);
-        if (ApkUpdateUrl == null || ApkUpdateUrl.equals(""))
+        MyHybridConfig.WebZipItems = new ArrayList<>();
+        //解析配置文件config.xml
+        MyHybridConfig.WebZipItems = XmlPullParserUtils.getWebZipItem(mContext);
+
+        if (MyHybridConfig.Evnvionment == null)
         {
-            ToastUtil.showToast(mContext, "找不到APK的更新地址");
+            ToastUtil.showToast(mContext, "配置文件出错");
         } else
         {
-            mCheckApkUpdate.checkApkUpdate(ApkUpdateUrl, mApkVersion);
+            unZipRes();
+            if (MyHybridConfig.Evnvionment.equals("dev"))
+            {
+                setmJumpThread();
+            } else
+            {
+                CheckApkUpdate mCheckApkUpdate = new CheckApkUpdate(mHandler, mCheckH5Update);
+                mCheckH5Update.setCheckApkUpdateInterface(this);
+                if (MyHybridConfig.ApkUpdateUrl == null || MyHybridConfig.ApkUpdateUrl.equals(""))
+                {
+                    ToastUtil.showToast(mContext, "找不到APK的更新地址");
+                } else
+                {
+                    mCheckApkUpdate.checkApkUpdate(MyHybridConfig.ApkUpdateUrl, MyHybridConfig.ApkVersion);
+                }
+            }
         }
 
     }
@@ -182,9 +172,6 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
      */
     private void unZipRes()
     {
-        webZipItems = new ArrayList<>();
-        //解析配置文件config.xml
-        webZipItems = XmlPullParserUtils.getWebZipItem(mContext);
 
         mUnZipThread = new Thread(new Runnable()
         {
@@ -192,27 +179,27 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
             @Override
             public void run()
             {
-                mZipList = FileUtil.GetZipFileName(mZipPath);
-                if (mZipList == null)
+                MyHybridConfig.ZipList = FileUtil.GetZipFileName(MyHybridConfig.ZipPath);
+                if (MyHybridConfig.ZipList == null)
                 {
                     AssetCopyer assetCopyer = new AssetCopyer(mContext);
                     assetCopyer.copy();
                     System.out.println("第一次加载");
                 }
 
-                mZipList = FileUtil.GetZipFileName(mZipPath);
+                MyHybridConfig.ZipList = FileUtil.GetZipFileName(MyHybridConfig.ZipPath);
 
-                for (int i = 0; i < mZipList.size(); i++)
+                for (int i = 0; i < MyHybridConfig.ZipList.size(); i++)
                 {
-                    System.out.println("文件夹下的压缩包" + mZipList.get(i));
-                    File file = new File(mZipPath + mZipList.get(i));
+                    System.out.println("文件夹下的压缩包" + MyHybridConfig.ZipList.get(i));
+                    File file = new File(MyHybridConfig.ZipPath + MyHybridConfig.ZipList.get(i));
                     InputStream inputStream = fileToInputStream(file);
                     System.out.println(FileToMD5.md5sum(inputStream));
                 }
 
-                for (int i = 0; i < mZipList.size(); i++)
+                for (int i = 0; i < MyHybridConfig.ZipList.size(); i++)
                 {
-                    File file = new File(mZipPath + mZipList.get(i));
+                    File file = new File(MyHybridConfig.ZipPath + MyHybridConfig.ZipList.get(i));
                     InputStream inputStream = fileToInputStream(file);
                     String desPath = "data/data/" + PAGNAME + "/webroot/";
                     UnZipUtil.Unzip(inputStream, desPath);
@@ -246,10 +233,10 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
                 {
                     if (!mIsDownload)
                     {
-                        downloadApk(apkUpdateItem.getAppDownLoadUrl(), apkUpdateItem.getAppName());
+                        downloadApk(MyHybridConfig.ApkUpdateItem.getAppDownLoadUrl(), MyHybridConfig.ApkUpdateItem.getAppName());
                     } else
                     {
-                        AutoInstall.setUrl(mApkDownloadPath + apkUpdateItem.getAppName());
+                        AutoInstall.setUrl(mApkDownloadPath + MyHybridConfig.ApkUpdateItem.getAppName());
                         AutoInstall.install(mContext);
                     }
                 } else
@@ -258,7 +245,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
                     String name = "core.zip";
                     //创建文件夹 DownLoad，在存储卡下
                     WebZipItem item = mUpdateWebZips.get(0);
-                    mDownloadFileUtil.downloadFiles(progressBar, mUpdateWebZips, mZipPath);
+                    mDownloadFileUtil.downloadFiles(progressBar, mUpdateWebZips, MyHybridConfig.ZipPath);
                 }
                 v.setClickable(false);
             }
@@ -266,7 +253,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
         btnCancle = (Button) layout.findViewById(R.id.btn_updateCancle);
         if (type == TYPE_APK)
         {
-            tv_Title.setText(apkUpdateItem.getUpdateMsg());
+            tv_Title.setText(MyHybridConfig.ApkUpdateItem.getUpdateMsg());
         } else
         {
             tv_Title.setText("您的资源包需要升级,是否现在升级");
@@ -281,15 +268,15 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
             @Override
             public void onClick(View v)
             {
+                v.setClickable(false);
                 if (type == TYPE_APK)
                 {
-                    if (H5UpdateUrl == null || H5UpdateUrl.equals(""))
+                    if (MyHybridConfig.H5UpdateUrl == null || MyHybridConfig.H5UpdateUrl.equals(""))
                     {
-                        ToastUtil.showToast(mContext,"找不到资源包得更新地址");
-                    }
-                    else
+                        ToastUtil.showToast(mContext, "找不到资源包得更新地址");
+                    } else
                     {
-                        mCheckH5Update.checkApkUpdate(H5UpdateUrl, webZipItems);
+                        mCheckH5Update.checkApkUpdate(MyHybridConfig.H5UpdateUrl, MyHybridConfig.WebZipItems);
                     }
                 } else
                 {
@@ -340,13 +327,14 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
             WebZipItem tmp = items.get(i);
             if (tmp.isNeedUpdate())
             {
-                System.out.println("<======updata========>" + tmp.getModuleName()+tmp.getModuleMd5());
+                System.out.println("<======updata========>" + tmp.getModuleName() + tmp
+                        .getModuleMd5());
                 mUpdateWebZips.add(tmp);
             }
         }
         if (mUpdateWebZips.size() > 0)
         {
-            mHandler.sendEmptyMessage(H5_NORMAL_SHOW);
+            mHandler.sendEmptyMessage(MyHybridConfig.H5_FOCE_SHOW);
         } else
         {
             setmJumpThread();
@@ -356,7 +344,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
     @Override
     public void onCheckH5UpdateError()
     {
-        mHandler.sendEmptyMessage(ALERT_NETERROR);
+        mHandler.sendEmptyMessage(MyHybridConfig.ALERT_NETERROR);
     }
 
     private void downloadApk(String downloadUrl, String name)

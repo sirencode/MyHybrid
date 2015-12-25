@@ -115,13 +115,13 @@ public class CheckH5Update
                 String updateUrl = jsonObject.getString("updateUrl");
                 String moduleMd5 = jsonObject.getString("moduleMd5");
                 System.out.println("name=:" + moduleName + "，md5=：" + moduleMd5);
-                for (int j = 0; j < InitFramwork.mZipList.size(); j++)
+                for (int j = 0; j < MyHybridConfig.ZipList.size(); j++)
                 {
-                    File file = new File(InitFramwork.mZipPath + InitFramwork.mZipList.get(j));
+                    File file = new File(MyHybridConfig.ZipPath + MyHybridConfig.ZipList.get(j));
                     InputStream inputStream = InitFramwork.fileToInputStream(file);
                     String zipMd5 = FileToMD5.md5sum(inputStream);
                     System.out.println(zipMd5);
-                    if (InitFramwork.mZipList.contains(moduleName) && zipMd5.equals(moduleMd5))
+                    if (MyHybridConfig.ZipList.contains(moduleName) && zipMd5.equals(moduleMd5))
                     {
                         isUpdateH5 = false;
                         break;

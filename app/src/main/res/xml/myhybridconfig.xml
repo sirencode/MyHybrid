@@ -1,0 +1,43 @@
+
+<config>
+    <!--
+
+    uat    :测试环境、h5测试资源包、会检查并更新h5资源包、日志关闭
+    stg   :测试环境、h5测试资源包、会检查并更新h5资源包、日志打开
+    dev    :测试环境、h5测试资源包、不会检查并更新h5资源包、日志打开
+
+    -->
+
+    <CONFIG_TAG value="stg"/>
+    <!-- 设置appid，用来标示一个APP -->
+    <APPID value="1001"/>
+    <!-- 检查apk升级地址，请求参数及返回格式见“版本控制接口文档” -->
+    <url_apk_check_upgrade
+        value="http://192.168.57.1:8080/MyWebAPI/UpdateServlet"/>
+    <!-- 资源包升级地址，请求参数及返回格式见“版本控制接口文档” -->
+    <url_module_check_upgrade
+        value="http://192.168.57.1:8080/MyWebAPI/H5UpdateServlet"/>
+    <!-- webview代理字符串，提供h5判断客户端来源使用 -->
+    <webview_user_agent value="WebView"/>
+    <app_name value="demo"/>
+    <!-- 银行APPID 提供给后台服务器，用于检查版本升级 -->
+    <bank_app_id value="1001"/>
+    <!-- 是否校验https证书，该配置仅仅为开发方便使用，若上生产必须要设置为true -->
+    <IS_VERIFY_HTTPS value="false"/>
+
+    <!--
+     WebApp配置
+    该配置需要与打包在assets资源目录中的文件一致.
+    -->
+    <webresource type="list">
+        <item>
+            <!-- 模块名 -->
+            <moduleName value="core.zip"/>
+            <!-- 版本号 -->
+            <moduleMd5 value="F52E5D5659CEB444363AED98F56B0819"/>
+            <!-- 打包到apk中assets目录下到资源包 -->
+            <updateUrl value="/core.zip"/>
+        </item>
+    </webresource>
+
+</config>

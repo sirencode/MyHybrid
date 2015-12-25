@@ -188,14 +188,14 @@ public class DownloadFileUtil
     private void setDownloadProgress(ProgressBar pb, int progress)
     {
         Message message = Message.obtain();
-        message.what = InitFramwork.UPDATEPROCESSBAR;
+        message.what = MyHybridConfig.UPDATEPROCESSBAR;
         message.arg1 = progress;
         mHandler.sendMessage(message);
     }
 
     private void downloadErro()
     {
-        mHandler.sendEmptyMessage(InitFramwork.ALERT_DONEDOWNLOADAPK);
+        mHandler.sendEmptyMessage(MyHybridConfig.ALERT_DONEDOWNLOADAPK);
     }
 
     /**
@@ -203,7 +203,7 @@ public class DownloadFileUtil
      */
     private void onDownloadApkFinish()
     {
-        mHandler.sendEmptyMessage(InitFramwork.ALERT_DONEDOWNLOADAPK);
+        mHandler.sendEmptyMessage(MyHybridConfig.ALERT_DONEDOWNLOADAPK);
     }
 
     /**
@@ -211,7 +211,7 @@ public class DownloadFileUtil
      */
     private void onDownloadH5Finish()
     {
-        mHandler.sendEmptyMessage(InitFramwork.ALERT_DONEDOWNLOADH5);
+        mHandler.sendEmptyMessage(MyHybridConfig.ALERT_DONEDOWNLOADH5);
     }
 
 }
