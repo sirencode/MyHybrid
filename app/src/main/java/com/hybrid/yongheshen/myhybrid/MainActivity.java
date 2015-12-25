@@ -6,6 +6,9 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.widget.Button;
 
+import com.hybrid.yongheshen.myhybrid.web.BaseWebView;
+import com.hybrid.yongheshen.myhybrid.web.MyWebViewClient;
+
 public class MainActivity extends Activity implements View.OnClickListener
 {
     BaseWebView mWebView;

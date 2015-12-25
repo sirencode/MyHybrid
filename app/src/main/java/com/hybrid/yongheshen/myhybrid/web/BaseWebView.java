@@ -1,4 +1,4 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.web;
 
 
 import java.lang.reflect.Method;

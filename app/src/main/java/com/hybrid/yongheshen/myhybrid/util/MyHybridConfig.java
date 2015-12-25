@@ -1,4 +1,6 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.util;
+
+import com.hybrid.yongheshen.myhybrid.update.WebZipItem;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class MyHybridConfig
     public static String ZipPath;
 
     //获取更新相关信息
-    public static ApkUpdateItem ApkUpdateItem;
+    public static com.hybrid.yongheshen.myhybrid.update.ApkUpdateItem ApkUpdateItem;
 
     //检查更新APK的路径，加了参数
     public static String ApkUpdateUrl;

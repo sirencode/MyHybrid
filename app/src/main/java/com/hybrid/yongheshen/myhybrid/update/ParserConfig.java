@@ -1,7 +1,10 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.update;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
+
+import com.hybrid.yongheshen.myhybrid.util.MyHybridConfig;
+import com.hybrid.yongheshen.myhybrid.R;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -11,7 +14,7 @@ import java.util.List;
 /**
  * 作者： yongheshen on 15/12/10.
  */
-public class XmlPullParserUtils
+public class ParserConfig
 {
     public static List<WebZipItem> getWebZipItem(Context context)
     {

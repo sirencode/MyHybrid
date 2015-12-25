@@ -1,10 +1,10 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.util;
 
 import android.content.Context;
 import android.widget.Toast;
 
 /**
- * 作者： yongheshen on 15/12/15.
+ * 作者： shenyonghe689 on 15/12/15.
  */
 public class ToastUtil
 {

@@ -1,4 +1,4 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.update;
 
 import java.io.Serializable;
 

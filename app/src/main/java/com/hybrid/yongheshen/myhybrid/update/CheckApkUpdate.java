@@ -1,6 +1,8 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.update;
 
 import android.os.Handler;
+
+import com.hybrid.yongheshen.myhybrid.util.MyHybridConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -124,7 +126,9 @@ public class CheckApkUpdate
             MyHybridConfig.ApkUpdateItem = item;
         } catch (JSONException e)
         {
+            onCheckApkUpdateError();
             e.printStackTrace();
+            System.out.println("apk升级接口返回参数问题"+e.getMessage());
         }
         return item;
     }

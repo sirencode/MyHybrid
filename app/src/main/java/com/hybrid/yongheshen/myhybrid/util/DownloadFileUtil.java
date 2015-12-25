@@ -1,8 +1,10 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.util;
 
 import android.os.Handler;
 import android.os.Message;
 import android.widget.ProgressBar;
+
+import com.hybrid.yongheshen.myhybrid.update.WebZipItem;
 
 import java.io.File;
 import java.io.FileOutputStream;

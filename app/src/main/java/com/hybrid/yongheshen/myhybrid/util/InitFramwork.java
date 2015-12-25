@@ -1,4 +1,4 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,6 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.hybrid.yongheshen.myhybrid.MainActivity;
+import com.hybrid.yongheshen.myhybrid.R;
+import com.hybrid.yongheshen.myhybrid.update.AutoInstall;
+import com.hybrid.yongheshen.myhybrid.update.CheckApkUpdate;
+import com.hybrid.yongheshen.myhybrid.update.CheckH5Update;
+import com.hybrid.yongheshen.myhybrid.update.ParserConfig;
+import com.hybrid.yongheshen.myhybrid.update.WebZipItem;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -138,7 +146,7 @@ public class InitFramwork implements CheckH5Update.CheckH5UpdateInterface
     {
         MyHybridConfig.WebZipItems = new ArrayList<>();
         //解析配置文件config.xml
-        MyHybridConfig.WebZipItems = XmlPullParserUtils.getWebZipItem(mContext);
+        MyHybridConfig.WebZipItems = ParserConfig.getWebZipItem(mContext);
 
         if (MyHybridConfig.Evnvionment == null)
         {

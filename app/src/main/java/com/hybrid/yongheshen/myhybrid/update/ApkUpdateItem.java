@@ -1,7 +1,7 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.update;
 
 /**
- * 作者： yongheshen on 15/12/16.
+ * 作者： shenyonghe689 on 15/12/16.
  * APK升级信息包装处理
  */
 public class ApkUpdateItem

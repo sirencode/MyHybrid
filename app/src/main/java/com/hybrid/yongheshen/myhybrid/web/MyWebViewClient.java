@@ -1,4 +1,4 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.web;
 
 import android.graphics.Bitmap;
 import android.net.http.SslError;
@@ -6,6 +6,8 @@ import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.hybrid.yongheshen.myhybrid.MyApplication;
 
 /**
  * 作者： yongheshen on 15/12/14.

@@ -1,4 +1,8 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.update;
+
+import com.hybrid.yongheshen.myhybrid.util.FileToMD5;
+import com.hybrid.yongheshen.myhybrid.util.InitFramwork;
+import com.hybrid.yongheshen.myhybrid.util.MyHybridConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 作者： yongheshen on 15/12/17.
+ * 作者： shenyonghe689 on 15/12/17.
  */
 public class CheckH5Update
 {
@@ -141,12 +145,14 @@ public class CheckH5Update
         } catch (JSONException e)
         {
 
+            mInterface.onCheckH5UpdateError();
+            System.out.println("h5更新接口返回参数问题：" + e.getMessage());
             e.printStackTrace();
         }
         return items;
     }
 
-    interface CheckH5UpdateInterface
+    public interface CheckH5UpdateInterface
     {
         abstract void onCheckH5UpdateSuccess(List<WebZipItem> items);
         abstract void onCheckH5UpdateError();

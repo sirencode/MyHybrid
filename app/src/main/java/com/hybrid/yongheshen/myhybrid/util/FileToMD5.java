@@ -1,10 +1,10 @@
-package com.hybrid.yongheshen.myhybrid;
+package com.hybrid.yongheshen.myhybrid.util;
 
 import java.io.InputStream;
 import java.security.MessageDigest;
 
 /**
- * 作者： yongheshen on 15/12/10.
+ * 作者： shenyonghe689 on 15/12/10.
  */
 public class FileToMD5
 {
